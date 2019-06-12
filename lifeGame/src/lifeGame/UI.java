@@ -9,9 +9,19 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+
 //import javax.swing.JTextField;
 
 public class UI extends JFrame {
@@ -20,7 +30,8 @@ public class UI extends JFrame {
 	public static int cloumn=10;
 	public static JPanel[] panels=new JPanel[row*cloumn];
 	public static List<Integer> list = new ArrayList<>();
-	
+	private static Thread t;
+	private static int interval=0;
 	
 	public UI() {
 		// TODO Auto-generated constructor stub
@@ -33,8 +44,35 @@ public class UI extends JFrame {
 			centerP.add(panels[i]);
 		}
 		JPanel bootonP=new JPanel();
-		JButton start=new JButton("start");
-		start.addActionListener(new ActionListener() {
+		
+		JComboBox<String> jc=new JComboBox<>(new MyComboBox());	//new
+		JLabel jlSpeed=new JLabel("speed");
+		JSlider jsSpeed=new JSlider(JSlider.HORIZONTAL, 0, 100, 1);		
+		JLabel jlSize=new JLabel("size");
+		JSlider jsSize=new JSlider(JSlider.HORIZONTAL, 0, 100, 1);		
+		JTextField jtf=new JTextField(1);
+		JButton jbInfo=new JButton("help");
+		jbInfo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO 自动生成的方法存根
+				new MyJDialog().setVisible(true);
+			}
+		});
+		JButton reset=new JButton("reset");
+		reset.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO 自动生成的方法存根
+				Logic.init();
+				update(list);
+			}
+		});
+		update(list);
+		JButton next=new JButton("Next");
+		next.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -42,9 +80,58 @@ public class UI extends JFrame {
 				buttonStart();
 			}
 		});
-		JButton stop=new JButton("stop");
-		bootonP.add(start);
+		t=new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO 自动生成的方法存根
+				while(true) {
+					buttonStart();
+					try {
+						Thread.sleep(interval);
+					} catch (InterruptedException e) {
+						// TODO 自动生成的 catch 块
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		JButton stop=new JButton("start");
+		stop.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO 自动生成的方法存根
+				if(stop.getText()=="start") {
+					t.start();
+					stop.setText("stop");
+					
+				}else {				//需要调试
+					try {
+						t.wait();
+						stop.setText("start");
+					} catch (InterruptedException e1) {
+						// TODO 自动生成的 catch 块
+						e1.printStackTrace();
+					}
+					
+				}
+				
+			}
+		});
+		bootonP.add(jc);	//new
+		
+		bootonP.add(next);
 		bootonP.add(stop);
+		
+		bootonP.add(reset);//new
+		bootonP.add(jtf);	
+		bootonP.add(jlSpeed);
+		bootonP.add(jsSpeed);		
+		bootonP.add(jlSize);		
+		bootonP.add(jsSize);
+		bootonP.add(jbInfo);
+		
 		con.add(centerP, BorderLayout.CENTER);
 		con.add(bootonP, BorderLayout.SOUTH);
 		setSize(500, 400);
@@ -59,10 +146,11 @@ public class UI extends JFrame {
 		}
 	}
 	
-	public void update(int[] pst) {
-		for(int i:pst) {
-			panels[i].setBackground(Color.pink);
+	public void update(List<Integer> list) {
+		for(int i=0;i<list.size();i++) {
+			panels[list.get(i)].setBackground(Color.pink);
 		}
+		list.clear();
 	}
 	
 	public void buttonStart() {
@@ -79,5 +167,42 @@ public class UI extends JFrame {
 	
 	public void updateList() {
 		//for(int i)
+	}
+}
+class MyComboBox extends AbstractListModel<String> implements ComboBoxModel<String>{
+	String selecteditem=null;
+	String[] test= {"aaaa","b","c","d"};
+	@Override
+	public int getSize() {
+		// TODO 自动生成的方法存根
+		return test.length;
+	}
+
+	@Override
+	public String getElementAt(int index) {
+		// TODO 自动生成的方法存根
+		return test[index];
+	}
+
+	@Override
+	public void setSelectedItem(Object anItem) {
+		// TODO 自动生成的方法存根
+		selecteditem=(String) anItem;
+	}
+
+	@Override
+	public Object getSelectedItem() {
+		// TODO 自动生成的方法存根
+		return selecteditem;
+	}
+	
+}
+class MyJDialog extends JDialog{
+	public MyJDialog() {
+		super(Test.getUI(), "info", true);
+		Container con=getContentPane();
+		JTextArea jta=new JTextArea("info");
+		con.add(jta);
+		setBounds(200, 100, 200, 200);
 	}
 }

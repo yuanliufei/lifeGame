@@ -4,14 +4,22 @@ public class Logic {
 	public static int [][] array = new int[UI.row][UI.cloumn];
 	
 	
-	static {
+	/*static {
+		int[][] initial= {{4,4},{5,5},{6,3},{6,4},{6,5}};
 		array[4][4]=1;
-		array[4][5]=1;
-		array[4][7]=1;
-		array[4][6]=1;
-		array[5][4]=1;	
+		array[5][5]=1;
+		array[6][3]=1;
+		array[6][4]=1;
+		array[6][5]=1;	
+		
+	}*/
+	public static void init() {
+		int[][] initial= {{0,1},{1,2},{2,0},{2,1},{2,2}};
+		for(int i=0;i<initial.length;i++) {
+			array[initial[i][0]][initial[i][1]]=1;
+			UI.list.add(initial[i][0]*UI.cloumn+initial[i][1]);
+		}
 	}
-	
 	public static void change() {
 		int [][] copyArray= new int[UI.row][UI.cloumn]; 
 		for(int i=0;i<array.length;i++) {

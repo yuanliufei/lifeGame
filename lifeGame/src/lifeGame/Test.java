@@ -3,12 +3,14 @@ package lifeGame;
 import java.util.List;
 
 public class Test {
-
+	private static UI ui=null;
 	public static void main(String[] args) {
-		UI ui=new UI();
+		Logic l = new Logic();
+		Logic.init();
+		ui=new UI();
 		//int [] pst = {35,45,47};
 		//ui.update(pst);
-		Logic l = new Logic();
+		
 		/*
 		for(int i=0;i<3;i++) {
 			Logic.change();
@@ -22,5 +24,7 @@ public class Test {
 			System.out.println(list.get(i));
 		}
 	}
-
+	public static UI getUI() {
+		return ui;
+	}
 }
