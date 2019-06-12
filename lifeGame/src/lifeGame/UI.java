@@ -12,9 +12,10 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+//import javax.swing.JTextField;
 
 public class UI extends JFrame {
+
 	public static int row=10;
 	public static int cloumn=10;
 	public static JPanel[] panels=new JPanel[row*cloumn];
@@ -65,13 +66,16 @@ public class UI extends JFrame {
 	}
 	
 	public void buttonStart() {
+		Logic.change();
 		for(int i=0;i<list.size();i++) {
-			if(panels[list.get(i)].getBackground()==Color.WHITE) {
+			System.out.println(panels[list.get(i)].getBackground());
+			if(panels[list.get(i)].getBackground().equals(Color.white)) {
 				panels[list.get(i)].setBackground(Color.PINK);
 			}else {
 				panels[list.get(i)].setBackground(Color.WHITE);
 			}
 		}
+		list.clear();
 	}
 	
 	public void updateList() {
