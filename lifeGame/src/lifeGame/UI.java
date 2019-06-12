@@ -68,7 +68,6 @@ public class UI extends JFrame {
 	public void buttonStart() {
 		Logic.change();
 		for(int i=0;i<list.size();i++) {
-			System.out.println(panels[list.get(i)].getBackground());
 			if(panels[list.get(i)].getBackground().equals(Color.white)) {
 				panels[list.get(i)].setBackground(Color.PINK);
 			}else {

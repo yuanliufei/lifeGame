@@ -14,6 +14,8 @@ public class Test {
 			Logic.change();
 			print(UI.list);
 		}*/
+		//int count=Logic.count(7, 9, Logic.array);
+		//System.out.println(count);
 	}
 	public static void print(List<Integer> list) {
 		for(int i=0;i<list.size();i++) {

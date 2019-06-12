@@ -9,9 +9,7 @@ public class Logic {
 		array[4][5]=1;
 		array[4][7]=1;
 		array[4][6]=1;
-		array[5][4]=1;
-		//等会要改的
-		//UI.list.add(0*10+);
+		array[5][4]=1;	
 	}
 	
 	public static void change() {
@@ -21,8 +19,10 @@ public class Logic {
 				copyArray[i][j] = array[i][j];
 			}
 		}
-		for(int i=1;i<copyArray.length-1;i++) {
-			for(int j=1;j<copyArray[i].length-1;j++) {
+		
+		
+		for(int i=0;i<copyArray.length;i++) {
+			for(int j=0;j<copyArray[i].length;j++) {
 				if(copyArray[i][j]==1 && (count(i,j,copyArray)==2 ||count(i,j,copyArray)==3 ))
 					array[i][j] = 1;
 				else if(copyArray[i][j]==0 && count(i,j,copyArray)==3) {
@@ -38,8 +38,43 @@ public class Logic {
 		}
 	}
 	
-	public static int count(int i,int j,int[][] array) {
+	/*
+	public static int count2(int i,int j,int[][] array) {
 		return array[i-1][j-1]+array[i-1][j]+array[i-1][j+1]+
 				array[i][j-1]+array[i][j+1]+array[i+1][j-1]+array[i+1][j]+array[i+1][j+1];
+	}*/
+	
+	public static int count(int i,int j,int[][] array) {
+		int count=0;
+		if(i==0) {
+			if(j==0) {
+				count=array[i][j+1]+array[i+1][j]+array[i+1][j+1];
+			}else if(j==UI.cloumn-1) {
+				count=array[i][j-1]+array[i+1][j]+array[i+1][j-1];
+			}else {
+				count=array[i][j-1]+array[i+1][j-1]+array[i+1][j]+
+				array[i+1][j+1]+array[i][j+1];
+			}
+		}else if(i==UI.row-1) {
+			if(j==0) {
+				count=array[i-1][j]+array[i-1][j+1]+array[i][j+1];
+			}else if(j==UI.cloumn-1) {
+				count=array[i-1][j-1]+array[i-1][j]+array[i][j-1];
+			}else {
+				count=array[i-1][j-1]+array[i-1][j]+array[i-1][j+1]+
+				array[i][j-1]+array[i][j+1];
+			}
+		}else if(j==0) {
+			count=array[i-1][j]+array[i-1][j+1]+array[i][j+1]+
+				array[i+1][j+1]+array[i+1][j];
+		}else if(j==UI.cloumn-1) {
+			count=array[i-1][j]+array[i-1][j-1]+array[i][j-1]+
+					array[i+1][j-1]+array[i+1][j];	
+		}else {
+			count = array[i-1][j-1]+array[i-1][j]+array[i-1][j+1]+
+					array[i][j-1]+array[i][j+1]+array[i+1][j-1]+array[i+1][j]+array[i+1][j+1];
+		}
+		
+		return count;
 	}
 }
