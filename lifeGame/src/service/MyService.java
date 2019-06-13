@@ -1,6 +1,6 @@
 package service;
 
-import lifeGame.UI;
+import UI.UI;
 
 public class MyService {
 	

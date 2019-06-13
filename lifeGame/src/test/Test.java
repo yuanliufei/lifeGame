@@ -1,7 +1,6 @@
 package test;
 
-import lifeGame.UI;
-import lifeGame.UI2;
+import UI.UI;
 
 public class Test {
 

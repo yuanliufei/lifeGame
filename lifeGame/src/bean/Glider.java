@@ -1,6 +1,6 @@
 package bean;
 
-import lifeGame.UI;
+import UI.UI;
 import service.MyService;
 
 public class Glider {
@@ -15,7 +15,6 @@ public class Glider {
 	}
 	
 	public static void setGlider() {
-		System.out.println("±æ¥Œ…Ë÷√Glidernext");
 		MyService.change(array);
 	}
 	

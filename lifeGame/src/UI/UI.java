@@ -1,4 +1,4 @@
-package lifeGame;
+package UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,19 +10,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.AbstractListModel;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import bean.Exploder;
 import bean.Glider;
 import bean.LightweightSpaceShip;
@@ -30,16 +25,21 @@ import bean.SmallExploder;
 import bean.TenCellRow;
 import bean.Tumbler;
 
-
-//import javax.swing.JTextField;
-
 public class UI extends JFrame {
 
-	public static int row=20;
-	public static int cloumn=20;
+	public static int row=30;
+	public static int cloumn=30;
+	
+	public static String modual=null;
+	public static int speed;
+	public static volatile int flag=0;
+	
 	public static JPanel[] panels=new JPanel[row*cloumn];
+	
 	public static List<Integer> list = new ArrayList<>();
+	
 	JButton next = null;
+	JButton start=null;
 	
 	public UI() {
 		setTitle("LiFe Game");
@@ -57,68 +57,33 @@ public class UI extends JFrame {
 		String[] listModual = {"Clear","Glider","Small Exploder","Exploder"
 				,"10 Cell Row","Lightweight spaceship","Tumbler"};
 		JComboBox<String> comboBox = new JComboBox<String>(listModual);
-		//comboBox.
 		selectModual(comboBox);
-		/*
+		
+		next=new JButton("Next");
+		
+		start=new JButton("start");
 		JLabel jlSpeed=new JLabel("speed");
 		JSlider jsSpeed=new JSlider(JSlider.HORIZONTAL, 0, 100, 1);		
-		JLabel jlSize=new JLabel("size");
-		JSlider jsSize=new JSlider(JSlider.HORIZONTAL, 0, 100, 1);		
-		JTextField jtf=new JTextField(1);
-		JButton jbInfo=new JButton("help");
-		jbInfo.addActionListener(new ActionListener() {
+		jsSpeed.addChangeListener(new ChangeListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void stateChanged(ChangeEvent e) {
 				// TODO 自动生成的方法存根
-				new MyJDialog().setVisible(true);
+				JSlider s=(JSlider) e.getSource();
+				speed=s.getValue();
 			}
 		});
 		
-		selectModual(comboBox);
-		
-		JButton reset=new JButton("reset");
-		reset.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO 自动生成的方法存根
-				Logic.init();
-				update(list);				//待修改
-			}
-		});
-		*/
-		
-		/*JButton */next=new JButton("Next");
-		/*
-		next.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				buttonNext(modual);
-			}
-		});*/
-		
-		JButton stop=new JButton("start");
-		
-		bootonP.add(comboBox);	//new
-		
+		bootonP.add(comboBox);	
 		bootonP.add(next);
-		bootonP.add(stop);
-		
-		/*
-		bootonP.add(reset);//new
-		bootonP.add(jtf);	
+		bootonP.add(start);
 		bootonP.add(jlSpeed);
-		bootonP.add(jsSpeed);		
-		bootonP.add(jlSize);		
-		bootonP.add(jsSize);
-		bootonP.add(jbInfo);*/
+		bootonP.add(jsSpeed);
 		
 		con.add(centerP, BorderLayout.CENTER);
 		con.add(bootonP, BorderLayout.SOUTH);
-		setSize(500, 400);
+		
+		setSize(1000, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
@@ -171,16 +136,37 @@ public class UI extends JFrame {
 		list.clear();
 	}
 	
+	Thread t=new Thread(new Runnable() {
+		
+		@Override
+		public void run() {
+			// TODO 自动生成的方法存根
+			while(true) {
+				if(flag==1) {
+					try {
+						buttonNext(modual);
+						Thread.sleep(1000-speed*10);
+					} catch (InterruptedException e) {
+						// TODO 自动生成的 catch 块
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		}
+	});
+	
 	public void selectModual(JComboBox<String> comboBox) {
         // 添加条目选中状态改变的监听器
         comboBox.addItemListener(new ItemListener() {
-        	String modual = null;
+        	//String modual = null;
             @Override
             public void itemStateChanged(ItemEvent e) {
                 // 只处理选中的状态
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                   changeModual(comboBox.getSelectedItem());  
-                   modual = (String) comboBox.getSelectedItem();
+                	modual = (String) comboBox.getSelectedItem();
+                	changeModual(modual);  
+                 
                    next.addActionListener(new ActionListener() {
            			
            			@Override
@@ -188,6 +174,25 @@ public class UI extends JFrame {
            				buttonNext(modual);
            			}
            		});
+                   start.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO 自动生成的方法存根
+						if(flag==0) {
+							t.start();
+							start.setText("stop");
+							flag=1;
+						}
+						else if(flag==1) {
+							flag=2;
+							start.setText("start");
+						}else if(flag==2) {
+							flag=1;
+							start.setText("stop");
+						}
+					}
+				});
                 }
             }
         });
@@ -197,6 +202,7 @@ public class UI extends JFrame {
 		switch((String)modualName) {
 		case "Clear":
 			setPanle();
+			list.clear();
 			break;
 		case "Glider":
 			setPanle();

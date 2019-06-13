@@ -1,6 +1,6 @@
 package bean;
 
-import lifeGame.UI;
+import UI.UI;
 import service.MyService;
 
 public class TenCellRow {
