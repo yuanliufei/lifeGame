@@ -8,6 +8,8 @@ public class Test {
 		// TODO Auto-generated method stub
 		new UI();
 		String s="abc";
+		String s1="abc";
+		String s3="abc";
 	}
 
 }
