@@ -1,4 +1,4 @@
-package lifeGame;
+package UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -1,4 +1,4 @@
-package lifeGame;
+package UI;
 
 public class Logic {
 	public static int [][] array = new int[UI.row][UI.cloumn];

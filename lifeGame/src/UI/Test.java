@@ -1,4 +1,4 @@
-package lifeGame;
+package UI;
 
 import java.util.List;
 

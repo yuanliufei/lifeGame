@@ -61,7 +61,38 @@ public class UI extends JFrame {
 		
 		next=new JButton("Next");
 		
+		next.addActionListener(new ActionListener() {
+   			
+   			@Override
+   			public void actionPerformed(ActionEvent e) {
+   				buttonNext(modual);
+   			}
+   		});
+		
 		start=new JButton("start");
+	    
+        start.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO 自动生成的方法存根
+				System.out.println(flag);
+				if(flag==0) {
+					t.start();
+					start.setText("stop");
+					flag=1;
+				}
+				else if(flag==1) {
+					System.out.println("1 to 2");
+					flag=2;
+					start.setText("start");
+				}else if(flag==2) {
+					System.out.println("2 to 1");
+					flag=1;
+					start.setText("stop");
+				}
+			}
+		});
 		JLabel jlSpeed=new JLabel("speed");
 		JSlider jsSpeed=new JSlider(JSlider.HORIZONTAL, 0, 100, 1);		
 		jsSpeed.addChangeListener(new ChangeListener() {
@@ -102,6 +133,7 @@ public class UI extends JFrame {
 	}
 	
 	public void buttonNext(String modual) {
+		if(modual!=null) {
 		switch(modual) {
 		case "Clear":
 			setPanle();
@@ -125,7 +157,6 @@ public class UI extends JFrame {
 			Tumbler.setTumbler();
 			break;
 		}
-		
 		for(int i=0;i<list.size();i++) {
 			if(panels[list.get(i)].getBackground().equals(Color.white)) {
 				panels[list.get(i)].setBackground(Color.PINK);
@@ -134,6 +165,7 @@ public class UI extends JFrame {
 			}
 		}
 		list.clear();
+		}
 	}
 	
 	Thread t=new Thread(new Runnable() {
@@ -166,33 +198,6 @@ public class UI extends JFrame {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                 	modual = (String) comboBox.getSelectedItem();
                 	changeModual(modual);  
-                 
-                   next.addActionListener(new ActionListener() {
-           			
-           			@Override
-           			public void actionPerformed(ActionEvent e) {
-           				buttonNext(modual);
-           			}
-           		});
-                   start.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO 自动生成的方法存根
-						if(flag==0) {
-							t.start();
-							start.setText("stop");
-							flag=1;
-						}
-						else if(flag==1) {
-							flag=2;
-							start.setText("start");
-						}else if(flag==2) {
-							flag=1;
-							start.setText("stop");
-						}
-					}
-				});
                 }
             }
         });
